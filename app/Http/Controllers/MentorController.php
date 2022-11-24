@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\MentorResource;
+use App\Mail\MentorMentee;
 use App\Models\Mentee;
 use App\Models\Mentor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class MentorController extends Controller
 {
@@ -84,8 +86,11 @@ class MentorController extends Controller
         if(!$mentee) {
             return response()->json(true,200);
         }
+
         $mentee->mentor_id = $currentIndex['id'];
         $mentee->update();
+
+        Mail::to($mentee->email)->send(new MentorMentee($mentee));
 
         return response()->json($nextId);
 

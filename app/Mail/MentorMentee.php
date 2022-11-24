@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Models\Mentee;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -18,9 +19,10 @@ class MentorMentee extends Mailable
      *
      * @return void
      */
-    public function __construct()
+    public  $mentee;
+    public function __construct(Mentee $mentee)
     {
-        //
+        $this->mentee = $mentee;
     }
 
     /**

@@ -1,11 +1,7 @@
 <x-mail::message>
-# {{$mentee->name}}
+# Dear {{$mentee->name}}
 
-The body of your message.
-
-<x-mail::button :url="''">
-Button Text
-</x-mail::button>
+ Your Mentor for the year 2023 is <strong>{{$mentee->mentor}}</strong>
 
 Thanks,<br>
 {{ config('app.name') }}
