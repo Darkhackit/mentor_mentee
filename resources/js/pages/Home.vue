@@ -1,17 +1,23 @@
 <template>
-    <navbar @startShuffle="shuffle" @reload="reload" />
+    <navbar @startShuffle="shuffle" @reload="reload" :processing="processing"/>
    <div class="container mx-auto pt-20 h-screen px-2">
        <section>
-                   <div class="">
+                   <div class="mt-10">
+                    <div>
+                        <h1 class="text-red-500 font-bold text-xl px-20 mb-10">Mentors</h1>
+                    </div>
                        <div class="flex flex-row space-x-3 p-3" :class="`grid-cols-${mentors.length}`">
-                               <div class="card card-compact w-full bg-base-100 shadow-xl" v-for="mentor in mentors" :key="mentor.id">
-                                   <figure><img :src="getPics + mentor.image" alt="Shoes" /></figure>
-                                   <div class="card-body">
-                                       <h2 class="text-2xl uppercase font-bold text-center">{{mentor.name}}</h2>
-                                       <div :key="mente.id" class="divide-y-4 divide-red-600" v-for="mente in mentor.mentees">
+                               <div class="card card-compact w-full bg-base-100" v-for="mentor in mentors" :key="mentor.id">
+                               <div class="flex flex-col space-y-5 justify-center items-center">
+                                    <div class="h-48 w-48 rounded-full"><img class="object-cover object-top rounded-full h-48 w-48" :src="getPics + mentor.image" alt="Shoes" /></div>
+                                    <h2 class="text-2xl uppercase font-bold text-center">{{mentor.name}}</h2>
+                                    <p class="text-red-500 text-sm text-center">{{mentor.postion||'Position'}}</p>
+                               </div>
+                                   <div class="card-body px-10 mt-10 bg-slate-100 rounded-md">
+                                       <div :key="mente.id" class="divide-y-4 divide-red-600" v-for="mente in mentor.mentees" v-if="mentor.mentees.length>=1">
                                            <div>
                                                <div class="flex justify-between pb-2">
-                                                   <span class="float-left text-base font-semibold">{{mente.name}}</span>
+                                                   <span class="float-left text-base uppercase font-semibold">{{mente.name}}</span>
                                                    <div class="avatar">
                                                        <div class="w-8 rounded">
                                                            <img class="rounded-full" :src="getPics + mente.image" alt="Tailwind-CSS-Avatar-component" />
@@ -20,17 +26,23 @@
                                                </div>
                                            </div>
                                        </div>
+                                    <div class="text-center" v-else>
+                                        <p>No mentees Available</p>
+                                    </div>
                                    </div>
                                </div>
                        </div>
                    </div>
        </section>
-       <div class="w-full  bg-white shadow-xl min-w-0 pt-36 ">
-           <div class="flex flex-row  flex-wrap">
-               <div class="flex-none py-6 px-3 first:pl-6 last:pr-6" v-for="mentee in mentees" :key="mentee.id">
+       <div class="w-full  bg-white  min-w-0 mt-20 px-20">
+        <div>
+            <h1 class="text-red-500 font-bold text-xl mb-10">Mentees</h1>
+        </div>
+           <div class="grid grid-cols-6 gap-10">
+               <div class="flex-none py-6 px-3 first:pl-6 last:pr-6 border border-slate-200 rounded-md" v-for="mentee in mentees" :key="mentee.id">
                    <div class="flex flex-col items-center justify-center gap-3">
                        <img class="w-14 h-14 object-cover rounded-full" :src="getPics + mentee.image">
-                       <strong class="text-black text-lg font-medium">{{ mentee.name }}</strong>
+                       <p class="text-black capitalize text-center">{{ mentee.name }}</p>
                    </div>
                </div>
            </div>
@@ -50,7 +62,8 @@ export default {
             mentees:[],
             mentors:[],
             timer:'',
-            id:null
+            id:null,
+            processing:false
         }
     },
     computed: {
@@ -82,6 +95,7 @@ export default {
           }
         },
       async  getStarted() {
+          this.processing = true;
           await this.shuffleStart()
           await this.get_mentees()
           await this.mentee_without_id()
@@ -104,6 +118,7 @@ export default {
         },
         clearTimer() {
           clearInterval(this.timer)
+          this.processing = false
         }
     },
     async mounted() {

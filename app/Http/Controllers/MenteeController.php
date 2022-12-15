@@ -15,6 +15,7 @@ class MenteeController extends Controller
 
         $mentee = new Mentee();
         $mentee->name = $request->name;
+        $mentee->email = $request->email;
 
         if($request->image) {
             $imageName = time().'.'.$request->image->extension();
@@ -46,6 +47,7 @@ class MenteeController extends Controller
 
         $mentee = Mentee::where('id',$request->id)->first();
         $mentee->name = $request->name;
+        $mentee->email = $request->email;
 
         if($request->image) {
             $imageName = time().'.'.$request->image->extension();
