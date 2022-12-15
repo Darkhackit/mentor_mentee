@@ -90,7 +90,7 @@ class MentorController extends Controller
         $mentee->mentor_id = $currentIndex['id'];
         $mentee->update();
 
-        // Mail::to($mentee->email)->send(new MentorMentee($mentee));
+//        Mail::to($mentee->email)->send(new MentorMentee($mentee));
 
         return response()->json($nextId);
 

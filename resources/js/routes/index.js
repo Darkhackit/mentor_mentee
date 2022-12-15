@@ -11,16 +11,21 @@ const routes = [
     {
                 path:'/',
                 name:'home',
-                component: Home
+                component: () => import('../pages/Home.vue')
     },
     {
         path: '/auth',
-        component: AuthLayout,
+        component: () => import('../layout/AuthLayout.vue'),
         children:[
             {
                 path:'login',
                 name:'login',
-                component:Login
+                component:() => import('../pages/auth/Login.vue')
+            },
+            {
+                path:'login/:id',
+                name:'mentee-login',
+                component:() => import('../pages/auth/MenteeLogin.vue')
             }
         ]
     },

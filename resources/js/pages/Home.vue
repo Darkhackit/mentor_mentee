@@ -7,11 +7,11 @@
                         <h1 class="text-red-500 font-bold text-xl px-20 mb-10">Mentors</h1>
                     </div>
                        <div class="flex flex-row space-x-3 p-3" :class="`grid-cols-${mentors.length}`">
-                               <div class="card card-compact w-full bg-base-100" v-for="mentor in mentors" :key="mentor.id">
+                               <div @click="$router.push({name:'mentee-login',params:{id:mentor.id}})" class="card card-compact w-full bg-base-100" v-for="mentor in mentors" :key="mentor.id">
                                <div class="flex flex-col space-y-5 justify-center items-center">
                                     <div class="h-48 w-48 rounded-full"><img class="object-cover object-top rounded-full h-48 w-48" :src="getPics + mentor.image" alt="Shoes" /></div>
-                                    <h2 class="text-2xl uppercase font-bold text-center">{{mentor.name}}</h2>
-                                    <p class="text-red-500 text-sm text-center">{{mentor.postion||'Position'}}</p>
+                                    <h2 class="text-2xl uppercase cursor-pointer font-bold text-center">{{mentor.name}}</h2>
+                                    <p class="text-red-500 text-sm text-center">{{mentor.position||'Position'}}</p>
                                </div>
                                    <div class="card-body px-10 mt-10 bg-slate-100 rounded-md">
                                        <div :key="mente.id" class="divide-y-4 divide-red-600" v-for="mente in mentor.mentees" v-if="mentor.mentees.length>=1">
