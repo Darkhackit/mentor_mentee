@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('image')->nullable();
             $table->string('email')->nullable();
+            $table->string('password')->nullable();
+            $table->string('saved_password')->nullable();
             $table->integer('mentor_id')->nullable();
             $table->timestamps();
         });

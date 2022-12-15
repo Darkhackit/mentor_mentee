@@ -19,6 +19,7 @@ class MentorController extends Controller
 
         $mentee = new Mentor();
         $mentee->name = $request->name;
+        $mentee->position = $request->position;
 
         if($request->image) {
             $imageName = time().'.'.$request->image->extension();
@@ -50,6 +51,7 @@ class MentorController extends Controller
 
         $mentee = Mentor::where('id',$request->id)->first();
         $mentee->name = $request->name;
+        $mentee->position = $request->position;
 
         if($request->image) {
             $imageName = time().'.'.$request->image->extension();

@@ -6,7 +6,8 @@ import {useRoute} from 'vue-router';
 const errors = ref([])
 const form = ref({
     email:'',
-    password:''
+    password:'',
+    id:''
 })
 const route = useRoute()
 const mentor_name = ref("")
@@ -17,9 +18,9 @@ const pics = computed(() => {
 const getMentor = async () => {
      try {
          let response = await axios.get(`/api/mentor/edit/${route.params.id}`)
-         console.log(response)
          mentor_name.value = response.data.name
          mentor_image.value = response.data.image
+         form.value.id = response.data.id
      }catch (e) {
          console.log(e.response)
      }
@@ -29,6 +30,12 @@ onMounted(async () => {
 })
 
 const login = async () => {
+    try {
+        let response = await axios.post(`/api/mentee_login`,form.value)
+    }catch (e) {
+        console.log(e.response)
+        errors.value = e.response.data.errors
+    }
 
 }
 const clearErrors = () => {

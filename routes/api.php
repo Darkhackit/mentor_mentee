@@ -36,3 +36,6 @@ Route::get('get_mentees',[\App\Http\Controllers\MentorController::class,'getMent
 Route::get('mentee_without_id',[\App\Http\Controllers\MenteeController::class,'mentee_without_mentor']);
 Route::post('shuffle',[\App\Http\Controllers\MentorController::class,'shuffle']);
 Route::post('reset',[\App\Http\Controllers\MentorController::class,'reset']);
+
+
+Route::post('mentee_login',[\App\Http\Controllers\MenteeController::class,'login']);

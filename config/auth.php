@@ -44,6 +44,10 @@ return [
             'driver' => 'jwt',
             'provider' => 'users',
         ],
+        'mentee' => [
+            'driver' => 'jwt',
+            'provider' => 'mentees',
+        ],
     ],
 
     /*
@@ -69,10 +73,10 @@ return [
             'model' => App\Models\User::class,
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+         'mentees' => [
+             'driver' => 'eloquent',
+             'table' => \App\Models\Mentee::class,
+         ],
     ],
 
     /*

@@ -11,6 +11,9 @@
                         <div>
                             <input v-model="form.name" type="text" placeholder="Enter Name" class="input w-full" />
                         </div>
+                        <div class="m-2">
+                            <input v-model="form.position" type="text" placeholder="Enter Position" class="input w-full" />
+                        </div>
                         <div class="pt-3">
                             <input @change="getInput" type="file" class="file-input w-full" />
                         </div>
@@ -62,6 +65,9 @@
                     <div>
                         <input type="text" v-model="editedForm.name" placeholder="Enter Name" class="input w-full" />
                     </div>
+                    <div class="m-2">
+                        <input v-model="editedForm.position" type="text" placeholder="Enter Position" class="input w-full" />
+                    </div>
                     <div class="pt-3">
                         <input @change="getInputed" type="file" class="file-input w-full" />
                     </div>
@@ -84,12 +90,14 @@ export default {
         return {
             form: {
                 name:'',
-                image:''
+                image:'',
+                position:''
             },
             editedForm: {
                 name:'',
                 id:'',
-                image:''
+                image:'',
+                position:''
             },
             loading:true,
             columns:[
@@ -124,6 +132,7 @@ export default {
                 let form = new FormData()
                 form.append('name',this.form.name)
                 form.append('image',this.form.image)
+                form.append('position',this.form.position)
                 await axios.post('/api/add-mentor',form)
                 await this.getMentee()
                 this.form.name = ""
@@ -139,6 +148,7 @@ export default {
                 let form = new FormData()
                 form.append('name',this.editedForm.name)
                 form.append('image',this.editedForm.image)
+                form.append('position',this.editedForm.position)
                 form.append('id',this.editedForm.id)
                 await axios.post('/api/update-mentor',form)
                 await this.getMentee()
@@ -157,6 +167,7 @@ export default {
             try {
                 let response = await axios.get(`/api/mentor/edit/${id}`)
                 this.editedForm.name = response.data.name
+                this.editedForm.position = response.data.position
                 this.editedForm.id = response.data.id
                 console.log(response.data)
             }catch (e) {

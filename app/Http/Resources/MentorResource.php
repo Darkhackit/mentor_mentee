@@ -18,6 +18,7 @@ class MentorResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'image' => $this->image,
+            'position' => $this->position,
             'mentees' => $this->mentees
         ];
     }

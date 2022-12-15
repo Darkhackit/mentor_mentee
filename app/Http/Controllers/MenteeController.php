@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\MenteeResource;
 use App\Models\Mentee;
+use App\Models\Mentor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class MenteeController extends Controller
 {
@@ -70,5 +73,38 @@ class MenteeController extends Controller
     public function mentee_without_mentor(): \Illuminate\Http\JsonResponse
     {
         return response()->json(Mentee::where('mentor_id',null)->get());
+    }
+
+    public function login(Request $request)
+    {
+        $this->validate($request,[
+            'id' => ['required'],
+            'email' => ['required','email'],
+            'password' => ['required']
+        ]);
+        $mentor = Mentor::where('id',$request->id)->first();
+        $checkMenteeExistence = $mentor->mentees->where('email', $request->email)->first();
+        if(!$checkMenteeExistence) {
+            return response()->json(['errors' => [
+                'email' => ["Please you do not belong to {$mentor->name} group"]
+            ]],422);
+        }
+        $credentials = $request->only('email', 'password');
+        $token = auth('mentee')->attempt($credentials);
+        if (!$token) {
+            return response()->json(['errors' => [
+                'email' => ['Incorrect credentials']
+            ]], 422);
+        }
+        $user = new MenteeResource(auth('mentee')->user());
+        return response()->json([
+            'status' => 'success',
+            'user' => $user,
+            'authorisation' => [
+                'token' => $token,
+                'type' => 'bearer',
+            ]
+        ]);
+
     }
 }
