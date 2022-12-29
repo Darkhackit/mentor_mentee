@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class MenteeResource extends JsonResource
+class PostResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,10 +16,13 @@ class MenteeResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
-            'email' => $this->email,
+            'body'=> $this->body,
             'image' => $this->image,
             'mentor' => $this->mentor,
+            'mentee' => $this->mentee,
+            'comments' => CommentResource::collection($this->comments),
+            'comments_count' => $this->comments->count(),
+            'created_at' => $this->created_at->diffForHumans()
         ];
     }
 }

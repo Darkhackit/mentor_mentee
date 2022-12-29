@@ -2,17 +2,30 @@
 
 namespace App\Models;
 
-use Illuminate\Foundation\Auth\User ;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 
-class Mentee extends User implements JWTSubject
+class Mentee extends Authenticatable implements JWTSubject
 {
-    use HasFactory;
+     use HasApiTokens, HasFactory, Notifiable;
+     protected $guard = "mentee";
+    protected $hidden = [
+        'password',
+    ];
     public function mentor(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Mentor::class);
+    }
+    public function posts(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->hasMany(Post::class)->latest();
+    }
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
     }
     public function getJWTIdentifier()
     {

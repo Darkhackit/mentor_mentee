@@ -2,14 +2,17 @@
 <script setup>
 import {computed, onMounted, ref} from "vue";
 import axios from "axios";
-import {useRoute} from 'vue-router';
+import {useRoute,useRouter} from 'vue-router';
+import {useStore} from "vuex";
+const route = useRoute()
+const router = useRouter()
+const store = useStore()
 const errors = ref([])
 const form = ref({
     email:'',
     password:'',
     id:''
 })
-const route = useRoute()
 const mentor_name = ref("")
 const mentor_image = ref("")
 const pics = computed(() => {
@@ -32,6 +35,11 @@ onMounted(async () => {
 const login = async () => {
     try {
         let response = await axios.post(`/api/mentee_login`,form.value)
+        store.commit("auth/SET_MENTEE_AUTHENTICATION",true)
+        store.commit("auth/SET_MENTEE",response.data.user)
+        store.commit("auth/SET_MENTEE_TOKEN",response.data.authorisation.token)
+        window.localStorage.setItem('prime_mentee',response.data.authorisation.token)
+        await router.push({name:'mentor_post',params:{id:response.data.user.mentor.name}})
     }catch (e) {
         console.log(e.response)
         errors.value = e.response.data.errors

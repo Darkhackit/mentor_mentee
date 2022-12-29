@@ -3,10 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\MenteeResource;
+use App\Http\Resources\PostResource;
+use App\Models\Comment;
 use App\Models\Mentee;
 use App\Models\Mentor;
+use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class MenteeController extends Controller
 {
@@ -15,10 +19,12 @@ class MenteeController extends Controller
         $this->validate($request,[
             'name' => ['required']
         ]);
-
+        $password = mt_rand(10000,999999);
         $mentee = new Mentee();
         $mentee->name = $request->name;
         $mentee->email = $request->email;
+        $mentee->password = Hash::make($password);
+        $mentee->saved_password = $password;
 
         if($request->image) {
             $imageName = time().'.'.$request->image->extension();
@@ -90,7 +96,7 @@ class MenteeController extends Controller
             ]],422);
         }
         $credentials = $request->only('email', 'password');
-        $token = auth('mentee')->attempt($credentials);
+        $token = Auth::guard('mentee')->attempt($credentials);
         if (!$token) {
             return response()->json(['errors' => [
                 'email' => ['Incorrect credentials']
@@ -105,6 +111,98 @@ class MenteeController extends Controller
                 'type' => 'bearer',
             ]
         ]);
+
+    }
+    public function refresh()
+    {
+        return response()->json([
+            'status' => 'success',
+            'user' => new MenteeResource(auth('mentee')->user()),
+            'authorisation' => [
+                'token' => Auth::guard('mentee')->refresh(),
+                'type' => 'bearer',
+            ]
+        ]);
+    }
+    public function group_members($id)
+    {
+        $mentor = Mentor::where('name',$id)->first();
+        $checkIfMenteeExit = $mentor->mentees->where('id',\auth('mentee')->id())->first();
+        if(!$checkIfMenteeExit) {
+            return response()->json(['error' => 'You do not belong to this group'],302);
+        }
+
+        return response()->json(MenteeResource::collection($mentor->mentees->where('id','!=',\auth()->id())));
+
+    }
+
+    public function create_post(Request $request)
+    {
+        $mentor = Mentor::where('name',$request->mentor)->first();
+        $checkIfMenteeExit = $mentor->mentees->where('id',\auth('mentee')->id())->first();
+        if(!$checkIfMenteeExit) {
+            return response()->json(['error' => 'You do not belong to this group'],302);
+        }
+
+        $this->validate($request,[
+            'body' => ['required']
+        ]);
+
+        $post = new Post();
+        $post->body = $request->body;
+        $post->mentor_id = $mentor->id;
+        $post->mentee_id = \auth('mentee')->id();
+
+        if($request->image) {
+            $imageName = time().'.'.$request->image->extension();
+            $request->image->move(public_path('post_files'), $imageName);
+            $post->image = $imageName;
+        }
+        $post->save();
+
+        return response()->json(new PostResource($post));
+
+
+    }
+
+    public function get_post(): \Illuminate\Http\JsonResponse
+    {
+        $mentee = Mentee::where('id',\auth('mentee')->id())->first();
+        $mentor = $mentee->mentor;
+        $posts = $mentor->posts->toQuery()->orderBy('created_at','desc')->paginate(10);
+
+        return response()->json(PostResource::collection($posts)->response()->getData(true));
+    }
+
+    public function get_single_post(Request $request)
+    {
+        $mentor = Mentor::where('name',$request->mentor)->first();
+        $checkIfMenteeExit = $mentor->mentees->where('id',\auth('mentee')->id())->first();
+        if(!$checkIfMenteeExit) {
+            return response()->json(['error' => 'You do not belong to this group'],302);
+        }
+        $post = $mentor->posts->where('id',$request->post_id)->first();
+
+        return response()->json(new PostResource($post));
+    }
+    public function post_comment(Request $request)
+    {
+        $this->validate($request,[
+            'body' => ['required']
+        ]);
+        $post = Post::where('id', $request->post_id)->first();
+        $mentor = $post->mentor;
+        $checkIfMenteeExit = $mentor->mentees->where('id',\auth('mentee')->id())->first();
+        if(!$checkIfMenteeExit) {
+            return response()->json(['error' => 'You do not belong to this group'],302);
+        }
+        $comment = new Comment();
+        $comment->mentee_id = \auth('mentee')->id();
+        $comment->post_id = $post->id;
+        $comment->body = $request->body;
+
+        $comment->save();
+        return response()->json(new PostResource($post));
 
     }
 }

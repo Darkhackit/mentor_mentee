@@ -75,7 +75,7 @@ return [
 
          'mentees' => [
              'driver' => 'eloquent',
-             'table' => \App\Models\Mentee::class,
+             'model' => App\Models\Mentee::class,
          ],
     ],
 
@@ -97,6 +97,12 @@ return [
     'passwords' => [
         'users' => [
             'provider' => 'users',
+            'table' => 'password_resets',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        'mentees' => [
+            'provider' => 'mentees',
             'table' => 'password_resets',
             'expire' => 60,
             'throttle' => 60,

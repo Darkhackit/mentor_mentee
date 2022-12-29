@@ -30,6 +30,29 @@ const routes = [
         ]
     },
     {
+        path: '/community',
+        component: () => import('../layout/PostLayout.vue'),
+        children:[
+            {
+                path: ':id',
+                component: () => import('../pages/posts/Index.vue'),
+                children:[
+                    {
+                        path:'',
+                        component:() => import('../pages/posts/ShowPost.vue'),
+                        name:'mentor_post',
+                    },
+
+                    {
+                        path:'post/:post_id',
+                        component:() => import('../pages/posts/SinglePost.vue'),
+                        name:'single-post'
+                    }
+                ]
+            }
+        ]
+    },
+    {
         path: '/admin',
         component: AdminLayout,
         children: [

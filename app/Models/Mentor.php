@@ -12,4 +12,8 @@ class Mentor extends Model
     {
         return $this->hasMany(Mentee::class);
     }
+    public function posts(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Post::class)->latest();
+    }
 }
