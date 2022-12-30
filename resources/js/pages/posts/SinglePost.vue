@@ -2,7 +2,7 @@
 import {useRouter,useRoute} from "vue-router";
 import {useStore} from "vuex";
 import axios from "axios";
-import {ref, computed, onMounted, onBeforeMount} from 'vue'
+import {ref, computed, watch, onBeforeMount} from 'vue'
 
 
 const router = useRouter()
@@ -53,6 +53,11 @@ const comment =  async () => {
         console.log(e.response)
     }
 }
+watch(() => route.params.post_id,async () => {
+    console.log('Hi')
+    details.value.post_id = route.params.post_id
+    await getSinglePost()
+})
 
 onBeforeMount(async () => {
     await getSinglePost()
@@ -71,9 +76,9 @@ onBeforeMount(async () => {
         <div class="p-3">
             <div class="avatar">
                 <div class="w-8 rounded">
-                    <img class="rounded-full" :src="profile_pic + post?.mentee.image" alt="Tailwind-CSS-Avatar-component" />
+                    <img class="rounded-full" :src="profile_pic + post.mentee?.image" alt="Tailwind-CSS-Avatar-component" />
                 </div>
-                <span class=" pl-5 text-base uppercase font-semibold">{{ post?.mentee.name}}</span>
+                <span class=" pl-5 text-base uppercase font-semibold">{{ post.mentee?.name}}</span>
                 <span class="px-5 font-medium">{{post?.created_at}}</span>
             </div>
             <p>{{post?.body}}</p>

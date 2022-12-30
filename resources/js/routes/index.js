@@ -47,6 +47,11 @@ const routes = [
                         path:'post/:post_id',
                         component:() => import('../pages/posts/SinglePost.vue'),
                         name:'single-post'
+                    },
+                    {
+                        path:'profile/:mentee_id',
+                        component:() => import('../pages/posts/MenteeProfile.vue'),
+                        name:'mentee-profile'
                     }
                 ]
             }

@@ -12,7 +12,7 @@ const props = defineProps(['post'])
 <template>
     <div class="card mt-10 w-full bg-base-100 shadow-xl">
         <div class="p-3">
-            <div class="avatar">
+            <div class="avatar cursor-pointer" @click.prevent="$router.push({name:'profile-mentee',params:{mentee_id:props.post.mentee.id}})">
                 <div class="w-8 rounded">
                     <img class="rounded-full" :src="profile_pic + props.post.mentee.image" alt="Tailwind-CSS-Avatar-component" />
                 </div>

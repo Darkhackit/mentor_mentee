@@ -202,7 +202,17 @@ class MenteeController extends Controller
         $comment->body = $request->body;
 
         $comment->save();
+        $comment->post->touch();
         return response()->json(new PostResource($post));
 
+    }
+
+    public function top_post()
+    {
+        $mentee = Mentee::where('id',\auth('mentee')->id())->first();
+        $mentor = $mentee->mentor;
+        $posts = Post::withCount('comments')->orderBy('updated_at', 'desc')->with('comments')->where('mentor_id',$mentor->id)->take(5)->get();
+
+        return response()->json(PostResource::collection($posts));
     }
 }

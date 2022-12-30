@@ -1,16 +1,30 @@
 <script setup>
-import {computed, ref} from 'vue'
+import {computed, onBeforeMount, onMounted, ref} from 'vue'
 import {useRoute} from 'vue-router'
 import {useStore} from "vuex";
 import RightSideBar from "../../components/posts/RightSideBar.vue";
 import TopPost from "../../components/posts/TopPost.vue";
+import axios from "axios";
 
 const store = useStore();
 const route = useRoute()
 const token = computed(() => store.getters["auth/mentee_token"])
 
 
+const posts = ref({})
 
+const getLatestPost = async () => {
+    try {
+        let response = await axios.get('/api/top-post',{headers:{Authorization: 'Bearer ' + token.value}})
+        posts.value = response.data
+    }catch (e) {
+        console.log(e.response)
+    }
+}
+
+onBeforeMount(async () => {
+    await getLatestPost()
+})
 
 
 </script>
@@ -25,7 +39,9 @@ const token = computed(() => store.getters["auth/mentee_token"])
                      <router-view />
                  </div>
                  <div class="col-start-10 col-span-3 p-5 ">
-                     <top-post />
+                     <p class="text-xl font-bold">Top Post</p>
+                     <div class="divider"></div>
+                     <top-post v-for="post in posts" :post="post" />
                  </div>
 
              </div>

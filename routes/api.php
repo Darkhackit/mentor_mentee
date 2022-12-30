@@ -45,3 +45,4 @@ Route::post('/create-post',[\App\Http\Controllers\MenteeController::class,'creat
 Route::get('/get-posts',[\App\Http\Controllers\MenteeController::class,'get_post'])->middleware('auth:mentee');
 Route::post('/get_single_post',[\App\Http\Controllers\MenteeController::class,'get_single_post'])->middleware('auth:mentee');
 Route::post('/post-comment',[\App\Http\Controllers\MenteeController::class,'post_comment'])->middleware('auth:mentee');
+Route::get('/top-post',[\App\Http\Controllers\MenteeController::class,'top_post'])->middleware('auth:mentee');
