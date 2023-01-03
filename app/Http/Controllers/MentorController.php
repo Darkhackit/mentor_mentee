@@ -7,6 +7,7 @@ use App\Mail\MentorMentee;
 use App\Models\Mentee;
 use App\Models\Mentor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
 class MentorController extends Controller
@@ -29,6 +30,16 @@ class MentorController extends Controller
             $mentee->image = "default.jpeg";
         }
         $mentee->save();
+        $password = mt_rand();
+        $mentor = new Mentee();
+        $mentor->name = $request->name;
+        $mentor->image = $mentee->image;
+        $mentor->password = Hash::make($password);
+        $mentor->saved_password = $password;
+        $mentor->mentor_id = $mentee->id;
+        $mentor->is_mentor = true;
+
+        $mentor->save();
 
         return response()->json($mentee);
     }
@@ -100,7 +111,7 @@ class MentorController extends Controller
 
     public function reset(): \Illuminate\Http\JsonResponse
     {
-       $mentees =  Mentee::all();
+       $mentees =  Mentee::where('is_mentor',false)->get();
        foreach ($mentees as $mentee) {
            $mentee->mentor_id = null;
            $mentee->update();

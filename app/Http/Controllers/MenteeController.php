@@ -40,7 +40,7 @@ class MenteeController extends Controller
 
     public function index(): \Illuminate\Http\JsonResponse
     {
-        return response()->json(Mentee::orderBy('created_at','desc')->get());
+        return response()->json(Mentee::where('is_mentor',false)->orderBy('created_at','desc')->get());
     }
 
     public function edit(int $id): \Illuminate\Http\JsonResponse
@@ -78,7 +78,7 @@ class MenteeController extends Controller
 
     public function mentee_without_mentor(): \Illuminate\Http\JsonResponse
     {
-        return response()->json(Mentee::where('mentor_id',null)->get());
+        return response()->json(Mentee::where(['mentor_id' => null,'is_mentor' => false])->get());
     }
 
     public function login(Request $request)
@@ -132,7 +132,7 @@ class MenteeController extends Controller
             return response()->json(['error' => 'You do not belong to this group'],302);
         }
 
-        return response()->json(MenteeResource::collection($mentor->mentees->where('id','!=',\auth()->id())));
+        return response()->json(MenteeResource::collection($mentor->mentees->where('is_mentor',false)->where('id','!=',\auth()->id())));
 
     }
 
@@ -207,12 +207,54 @@ class MenteeController extends Controller
 
     }
 
-    public function top_post()
+    public function top_post(): \Illuminate\Http\JsonResponse
     {
         $mentee = Mentee::where('id',\auth('mentee')->id())->first();
         $mentor = $mentee->mentor;
         $posts = Post::withCount('comments')->orderBy('updated_at', 'desc')->with('comments')->where('mentor_id',$mentor->id)->take(5)->get();
 
         return response()->json(PostResource::collection($posts));
+    }
+    public function edit_post(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $post = Post::where('id',$request->id)->first();
+        if (\auth()->id() !== $post->mentee_id) {
+            return response()->json(['error' => 'Please you cant edit this post'],302);
+        }
+        return response()->json(new PostResource($post));
+    }
+
+    public function update_post(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $this->validate($request,[
+            'body'=>['required'],
+        ]);
+        $post = Post::where('id',$request->post_id)->first();
+        if (\auth('mentee')->id() !== $post->mentee_id) {
+            return response()->json(['error' => 'Please you cant edit this post'],302);
+        }
+        $post->body = $request->body;
+
+        if($request->image) {
+            $imageName = time().'.'.$request->image->extension();
+            $request->image->move(public_path('post_files'), $imageName);
+            $post->image = $imageName;
+        }
+
+        $post->update();
+
+        return response()->json(new PostResource($post));
+
+
+    }
+    public function delete_post(Request $request)
+    {
+        $post = Post::where('id',$request->id)->first();
+        if (\auth()->id() !== $post->mentee_id) {
+            return response()->json(['error' => 'Please you cant edit this post'],302);
+        }
+        $post->delete();
+
+        return response()->json(['success' => true]);
     }
 }

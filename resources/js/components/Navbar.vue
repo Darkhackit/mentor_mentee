@@ -6,7 +6,7 @@
         <div class="navbar-center">
 
             <img class="w-1/4" src="https://www.primeinsuranceghana.com/img/logo.png" alt="Prime Insurance">
-            <router-link to="/" class="btn btn-ghost normal-case text-4xl text-red-600">Mentor Mentee 0.1</router-link>
+            <router-link to="/" class="btn btn-ghost normal-case text-4xl text-red-600">Mentor Mentee 2.0</router-link>
         </div>
         <div class="navbar-end">
             <button v-if="!authenticated" @click.prevent="$router.push({name:'login'})" class="btn bg-red-500 mr-2">

@@ -46,3 +46,6 @@ Route::get('/get-posts',[\App\Http\Controllers\MenteeController::class,'get_post
 Route::post('/get_single_post',[\App\Http\Controllers\MenteeController::class,'get_single_post'])->middleware('auth:mentee');
 Route::post('/post-comment',[\App\Http\Controllers\MenteeController::class,'post_comment'])->middleware('auth:mentee');
 Route::get('/top-post',[\App\Http\Controllers\MenteeController::class,'top_post'])->middleware('auth:mentee');
+Route::post('/edit-post',[\App\Http\Controllers\MenteeController::class,'edit_post'])->middleware('auth:mentee');
+Route::post('/update-post',[\App\Http\Controllers\MenteeController::class,'update_post'])->middleware('auth:mentee');
+Route::post('/delete-post',[\App\Http\Controllers\MenteeController::class,'delete_post'])->middleware('auth:mentee');

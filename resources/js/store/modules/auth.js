@@ -5,6 +5,7 @@ const state = {
     authenticated:false,
     auth_mentee:false,
     mentee:'',
+    refreshTopPost:false,
     mentee_token:window.localStorage.getItem('prime_mentee') || null,
     user:null,
     token:window.localStorage.getItem('prime_mentor') || null
@@ -28,7 +29,11 @@ const mutations = {
     },
     SET_MENTEE_TOKEN:(state,payload) => {
         state.mentee_token = payload
-    }
+    },
+    SET_REFRESH_TO_POST:(state,payload) => {
+        state.refreshTopPost = payload
+    },
+
 }
 
 const actions = {
@@ -63,6 +68,7 @@ const getters = {
     auth_mentee: state => state.auth_mentee,
     mentee: state => state.mentee,
     mentee_token: state => state.mentee_token,
+    refreshTopPost: state => state.refreshTopPost,
 }
 
 

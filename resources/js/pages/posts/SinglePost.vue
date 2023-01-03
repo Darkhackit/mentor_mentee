@@ -12,6 +12,14 @@ const store = useStore()
 const post = ref({})
 const token = computed(() => store.getters["auth/mentee_token"])
 const user = computed(() => store.getters["auth/mentee"])
+const refreshTopPost = computed(() => store.getters["auth/refreshTopPost"])
+
+// const setRefreshTopPost = () => {
+//     if (refreshTopPost.value === false){
+//       return   store.commit('auth/SET_REFRESH_TO_POST',true)
+//     }
+//      return   store.commit('auth/SET_REFRESH_TO_POST',false)
+// }
 const show = (id) => {
     let ids = document.getElementById(id)
     if (ids.classList.contains("hidden")) {
@@ -49,6 +57,7 @@ const comment =  async () => {
         console.log(response)
         comment_details.value.body = ""
         post.value = response.data
+        store.commit('auth/SET_REFRESH_TO_POST',true)
     }catch (e) {
         console.log(e.response)
     }
@@ -57,6 +66,7 @@ watch(() => route.params.post_id,async () => {
     console.log('Hi')
     details.value.post_id = route.params.post_id
     await getSinglePost()
+    store.commit('auth/SET_REFRESH_TO_POST',true)
 })
 
 onBeforeMount(async () => {
@@ -90,16 +100,16 @@ onBeforeMount(async () => {
         <div class="divider"></div>
         <div class="card-actions justify-between">
             <button class="btn btn-ghost gap-2">
-                <font-awesome-icon color="blue" size="2xl" icon="fa-solid fa-thumbs-up" />
-                <div class="badge">+99</div>
+<!--                <font-awesome-icon color="blue" size="2xl" icon="fa-solid fa-thumbs-up" />-->
+<!--                <div class="badge">+99</div>-->
             </button>
             <button class="btn btn-ghost gap-2">
                 <font-awesome-icon  size="2xl"  icon="fa-solid fa-comment" />
                 <div class="badge">{{post?.comments_count}}</div>
             </button>
             <button class="btn btn-ghost gap-2">
-                <font-awesome-icon color="red" size="2xl" icon="fa-solid fa-thumbs-down" />
-                <div class="badge">+99</div>
+<!--                <font-awesome-icon color="red" size="2xl" icon="fa-solid fa-thumbs-down" />-->
+<!--                <div class="badge">+99</div>-->
             </button>
         </div>
     </div>

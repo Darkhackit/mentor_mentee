@@ -14,8 +14,10 @@ import { faThumbsUp } from '@fortawesome/free-solid-svg-icons'
 import { faComment } from '@fortawesome/free-solid-svg-icons'
 import { faThumbsDown } from '@fortawesome/free-solid-svg-icons'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+import { faPenToSquare } from '@fortawesome/free-solid-svg-icons'
+import { faTrash } from '@fortawesome/free-solid-svg-icons'
 
-library.add(faImage,faVideoCamera,faThumbsUp,faComment,faThumbsDown,faArrowLeft)
+library.add(faTrash,faImage,faVideoCamera,faThumbsUp,faComment,faThumbsDown,faArrowLeft,faPenToSquare)
 const options = {
     // You can set your default options here
 };

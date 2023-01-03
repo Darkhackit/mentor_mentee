@@ -21,10 +21,10 @@
 <template>
     <div>
         <div class="navbar  bg-base-100 fixed border-b border-red-600 z-10">
-            <div class="navbar-start">
+            <div class="navbar-start" @click.prevent="$router.push({name:'mentor_post',params:{id:$route.params.id}})">
                 <img class="w-1/6" src="https://www.primeinsuranceghana.com/img/logo.png" alt="Prime Insurance">
             </div>
-            <div class="navbar-center">
+            <div class="navbar-center cursor-pointer" @click.prevent="$router.push({name:'mentor_post',params:{id:$route.params.id}})">
                 <h2 class="text-xl text-red-500">{{$route.params.id}}</h2>
             </div>
             <div class="navbar-end">

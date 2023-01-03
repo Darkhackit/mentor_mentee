@@ -1,5 +1,5 @@
 <script setup>
-import {computed, onBeforeMount, onMounted, ref} from 'vue'
+import {computed, onBeforeMount, watch, ref} from 'vue'
 import {useRoute} from 'vue-router'
 import {useStore} from "vuex";
 import RightSideBar from "../../components/posts/RightSideBar.vue";
@@ -9,7 +9,7 @@ import axios from "axios";
 const store = useStore();
 const route = useRoute()
 const token = computed(() => store.getters["auth/mentee_token"])
-
+const refreshTopPost = computed(() => store.getters["auth/refreshTopPost"])
 
 const posts = ref({})
 
@@ -17,10 +17,15 @@ const getLatestPost = async () => {
     try {
         let response = await axios.get('/api/top-post',{headers:{Authorization: 'Bearer ' + token.value}})
         posts.value = response.data
+        store.commit('auth/SET_REFRESH_TO_POST',false)
+        console.log("Hey")
     }catch (e) {
         console.log(e.response)
     }
 }
+watch(refreshTopPost,async () => {
+    await getLatestPost()
+})
 
 onBeforeMount(async () => {
     await getLatestPost()
