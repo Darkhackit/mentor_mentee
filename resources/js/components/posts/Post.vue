@@ -16,6 +16,10 @@ const form = ref({
     post_id: ""
 })
 const errors = ref({})
+const imageExt = (str) => {
+    let str_ = str.substring(str.indexOf('.') + 1)
+    return str_
+}
 
 const props = defineProps(['post'])
 const displayForm = (id) => {
@@ -40,9 +44,13 @@ const deletePost = (id) => {
             </div>
             <p>{{ props.post.body.length <= 150 ? props.post.body.substring(0,150) : `${props.post.body.substring(0,150)}...` }} <router-link :to="{name:'single-post',params:{post_id:props.post.id}}" v-if="props.post.body.length >= 150" class="text-black text-sm font-bold">read more</router-link> </p>
         </div>
-        <div class="flex flex-col p-2" v-if="props.post.image">
-
+        <div class="flex flex-col p-2" v-if="imageExt(props.post.image) === 'jpeg' || imageExt(props.post.image) === 'jpg' || imageExt(props.post.image) === 'png' ">
             <img :src="post_pics + props.post.image" alt="Shoes" />
+        </div>
+        <div class="flex flex-col p-2" v-if="imageExt(props.post.image) === 'mp4' || imageExt(props.post.image) === 'mkv' || imageExt(props.post.image) === 'mpeg' ">
+            <video controls width="700"  alt="Shoes">
+                <source :src="post_pics + props.post.image" :type="`video/${imageExt(props.post.image)}`"   />
+            </video>
         </div>
         <div class="divider"></div>
         <div class="card-actions justify-between">

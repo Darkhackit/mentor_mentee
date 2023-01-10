@@ -20,6 +20,8 @@ const getGroupMembers = async () => {
         console.log(e.response)
     }
 }
+
+
 onMounted(async () => {
     console.log(token)
     await getGroupMembers()
@@ -30,17 +32,17 @@ onMounted(async () => {
 </script>
 <template>
     <div class="">
-        <div class="avatar">
+        <div class="avatar cursor-pointer" @click.prevent="$router.push({name:'mentee-profile',params:{mentee_id:user?.id}})">
             <div class="w-8 rounded">
-                <img class="rounded-full" :src="pics + user.image" alt="Tailwind-CSS-Avatar-component" />
+                <img class="rounded-full" :src="pics + user?.image" alt="Tailwind-CSS-Avatar-component" />
             </div>
-            <span class=" pl-5 text-base uppercase font-semibold">{{user.name}}</span>
+            <span class=" pl-5 text-base uppercase font-semibold">{{user?.name}}</span>
         </div>
     </div>
     <div class="divider"></div>
     <p class="text-sm text-neutral-600">Group Members</p>
     <div class="card w-full bg-base-100 shadow" v-for="groupMember in groupMembers" :key="groupMember.id">
-        <div class="card-body">
+        <div class="card-body cursor-pointer" @click.prevent="$router.push({name:'mentee-profile',params:{mentee_id:groupMember.id}})">
             <div class="avatar">
                 <div class="w-8 rounded">
                     <img class="rounded-full" :src="pics + groupMember.image" alt="Tailwind-CSS-Avatar-component" />
