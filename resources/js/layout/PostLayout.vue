@@ -3,13 +3,24 @@
  import {useStore} from 'vuex';
  import {useRouter} from 'vue-router'
  import {computed, onMounted} from "vue";
+ import axios from "axios";
 
  const store = useStore();
  const router = useRouter()
 
  const auth = computed(() => store.getters["auth/auth_mentee"])
+ const token = computed(() => store.getters["auth/mentee_token"])
  const user = computed(() => store.getters["auth/mentee"])
  const pic  = computed(() => "/profile/")
+
+ const logout = async () => {
+     try {
+          await axios.get('/api/mentee/logout',{headers:{Authorization: 'Bearer ' + token.value}})
+          await router.push('/')
+     }catch (e) {
+         console.log(e.response)
+     }
+ }
 
  onMounted(async () => {
      if(auth.value === false) {
@@ -42,7 +53,7 @@
                             </a>
                         </li>
                         <li><a>Settings</a></li>
-                        <li><a>Logout</a></li>
+                        <li><a @click.prevent="logout">Logout</a></li>
                     </ul>
                 </div>
             </div>

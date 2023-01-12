@@ -257,4 +257,13 @@ class MenteeController extends Controller
 
         return response()->json(['success' => true]);
     }
+
+    public function logout(): \Illuminate\Http\JsonResponse
+    {
+        Auth::logout();
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Successfully logged out',
+        ]);
+    }
 }

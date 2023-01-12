@@ -51,6 +51,10 @@ const post_pics = computed(() => "/post_files/")
 const goBack = () => {
     router.back()
 }
+const imageExt = (str) => {
+    let str_ = str.substring(str.indexOf('.') + 1)
+    return str_
+}
 const comment =  async () => {
     try {
         let response = await axios.post('/api/post-comment',comment_details.value,{headers:{Authorization: 'Bearer ' + token.value}})
@@ -93,9 +97,13 @@ onBeforeMount(async () => {
             </div>
             <p>{{post?.body}}</p>
         </div>
-        <div class="flex flex-col p-2">
-
-            <img :src="post_pics +  post?.image" alt="Shoes" />
+        <div class="flex flex-col p-2" v-if="imageExt(post.image) === 'jpeg' || imageExt(post.image) === 'jpg' || imageExt(post.image) === 'png' ">
+            <img :src="post_pics + post.image" alt="Shoes" />
+        </div>
+        <div class="flex flex-col p-2" v-if="imageExt(post.image) === 'mp4' || imageExt(post.image) === 'mkv' || imageExt(post.image) === 'mpeg' ">
+            <video controls width="750"   alt="Shoes">
+                <source :src="post_pics + post.image" :type="`video/${imageExt(post.image)}`"   />
+            </video>
         </div>
         <div class="divider"></div>
         <div class="card-actions justify-between">

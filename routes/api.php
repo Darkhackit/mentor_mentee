@@ -40,6 +40,7 @@ Route::post('reset',[\App\Http\Controllers\MentorController::class,'reset']);
 
 Route::post('mentee_login',[\App\Http\Controllers\MenteeController::class,'login'])->middleware('guest:mentee');
 Route::get('mentee/refresh',[\App\Http\Controllers\MenteeController::class,'refresh'])->middleware('auth:mentee');
+Route::get('mentee/logout',[\App\Http\Controllers\MenteeController::class,'logout'])->middleware('auth:mentee');
 Route::get('mentor/group-members/{id}',[\App\Http\Controllers\MenteeController::class,'group_members'])->middleware('auth:mentee');
 Route::post('/create-post',[\App\Http\Controllers\MenteeController::class,'create_post'])->middleware('auth:mentee');
 Route::get('/get-posts',[\App\Http\Controllers\MenteeController::class,'get_post'])->middleware('auth:mentee');

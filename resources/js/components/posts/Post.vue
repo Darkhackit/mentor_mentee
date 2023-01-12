@@ -48,7 +48,7 @@ const deletePost = (id) => {
             <img :src="post_pics + props.post.image" alt="Shoes" />
         </div>
         <div class="flex flex-col p-2" v-if="imageExt(props.post.image) === 'mp4' || imageExt(props.post.image) === 'mkv' || imageExt(props.post.image) === 'mpeg' ">
-            <video controls width="700"  alt="Shoes">
+            <video controls width="750"   alt="Shoes">
                 <source :src="post_pics + props.post.image" :type="`video/${imageExt(props.post.image)}`"   />
             </video>
         </div>
