@@ -16,6 +16,9 @@
  const logout = async () => {
      try {
           await axios.get('/api/mentee/logout',{headers:{Authorization: 'Bearer ' + token.value}})
+         store.commit('auth/SET_MENTEE_TOKEN',null)
+         store.commit('auth/SET_MENTEE',{})
+         store.commit('auth/SET_MENTEE_AUTHENTICATION',false)
           await router.push('/')
      }catch (e) {
          console.log(e.response)

@@ -52,7 +52,7 @@ const goBack = () => {
     router.back()
 }
 const imageExt = (str) => {
-    let str_ = str.substring(str.indexOf('.') + 1)
+    let str_ = str ? str.substring(str.indexOf('.') + 1) : ''
     return str_
 }
 const comment =  async () => {
@@ -147,7 +147,7 @@ onBeforeMount(async () => {
                  <span @click="show(comment.id)">reply</span>
                 <div class="avatar hidden ease-in duration-300" :id="comment.id">
                     <div class="w-8 rounded">
-                        <img class="rounded-full" :src="profile_pic + user.image" alt="Tailwind-CSS-Avatar-component" />
+                        <img class="rounded-full" :src="profile_pic + user?.image" alt="Tailwind-CSS-Avatar-component" />
                     </div>
                     <form>
                         <textarea cols="70"   placeholder="Type here" class="input ml-3 bg-white  w-full" ></textarea>

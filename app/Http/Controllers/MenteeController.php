@@ -45,7 +45,7 @@ class MenteeController extends Controller
 
     public function edit(int $id): \Illuminate\Http\JsonResponse
     {
-        return response()->json(Mentee::where('id',$id)->first());
+        return response()->json(new MenteeResource(Mentee::where('id',$id)->first()));
     }
 
     public function update(Request $request)

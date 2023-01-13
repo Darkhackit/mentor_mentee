@@ -17,7 +17,7 @@ const form = ref({
 })
 const errors = ref({})
 const imageExt = (str) => {
-    let str_ = str.substring(str.indexOf('.') + 1)
+    let str_ = str ? str.substring(str.indexOf('.') + 1) : ""
     return str_
 }
 

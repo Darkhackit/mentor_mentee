@@ -19,7 +19,7 @@ class Mentee extends Authenticatable implements JWTSubject
     {
         return $this->belongsTo(Mentor::class);
     }
-    public function posts(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function posts(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Post::class)->latest();
     }

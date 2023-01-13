@@ -20,6 +20,11 @@ class MenteeResource extends JsonResource
             'email' => $this->email,
             'image' => $this->image,
             'mentor' => $this->mentor,
+            'posts' => PostResource::collection($this->posts),
+            'post_count' => $this->posts->count(),
+            'is_mentor' => $this->is_mentor,
+            'mentor_id' => $this->mentor_id
+
         ];
     }
 }
