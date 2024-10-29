@@ -14,7 +14,8 @@
                                     <p class="text-red-500 text-sm uppercase text-center">{{mentor.position||'Position'}}</p>
                                </div>
                                    <div class="card-body px-10 mt-10 bg-slate-100 rounded-md">
-                                       <div :key="mente.id" class="divide-y-4 divide-red-600" v-for="mente in mentor.mentees" v-if="mentor.mentees.length">
+                                       {{mentor.mentees.length}}
+                                       <div :key="mente.id" class="divide-y-4 divide-red-600" v-for="mente in mentor.mentees" >
                                            <div>
                                                <div class="flex justify-between pb-2">
                                                    <span class="float-left text-base uppercase font-semibold">{{mente.name}}</span>
@@ -26,9 +27,9 @@
                                                </div>
                                            </div>
                                        </div>
-                                    <div class="text-center" v-else>
-                                        <p>No mentees Available</p>
-                                    </div>
+<!--                                    <div class="text-center" v-else>-->
+<!--                                        <p>No mentees Available</p>-->
+<!--                                    </div>-->
                                    </div>
                                </div>
                        </div>

@@ -6,13 +6,14 @@ use App\Http\Resources\MentorResource;
 use App\Mail\MentorMentee;
 use App\Models\Mentee;
 use App\Models\Mentor;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
 class MentorController extends Controller
 {
-    public function create(Request $request): \Illuminate\Http\JsonResponse
+    public function create(Request $request): JsonResponse
     {
         $this->validate($request,[
             'name' => ['required']
@@ -44,12 +45,12 @@ class MentorController extends Controller
         return response()->json($mentee);
     }
 
-    public function index(): \Illuminate\Http\JsonResponse
+    public function index(): JsonResponse
     {
         return response()->json(Mentor::orderBy('created_at','asc')->get());
     }
 
-    public function edit(int $id): \Illuminate\Http\JsonResponse
+    public function edit(int $id): JsonResponse
     {
         return response()->json(Mentor::where('id',$id)->first());
     }
@@ -81,11 +82,11 @@ class MentorController extends Controller
 
         return response()->json(['success' => true]);
     }
-    public function getMentees(): \Illuminate\Http\JsonResponse
+    public function getMentees(): JsonResponse
     {
         return response()->json(MentorResource::collection(Mentor::all()),200);
     }
-    public function shuffle(Request $request)
+    public function shuffle(Request $request): JsonResponse
     {
 
         if($request->current === null) {
@@ -109,7 +110,7 @@ class MentorController extends Controller
 
     }
 
-    public function reset(): \Illuminate\Http\JsonResponse
+    public function reset(): JsonResponse
     {
        $mentees =  Mentee::where('is_mentor',false)->get();
        foreach ($mentees as $mentee) {
